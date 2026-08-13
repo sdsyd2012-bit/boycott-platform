@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="دليل البدائل" />
+    <meta
+      name="description"
+      content="منصة توعوية مستقلة تساعدك على مقاطعة الشركات الداعمة للاحتلال واستكشاف البدائل الوطنية والآمنة."
+    />
+    <title>دليل البدائل | مقاطعة واعية وبدائل آمنة</title>
+    <script>
+      ;(function () {
+        try {
+          var t = localStorage.getItem('theme')
+          if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: light)').matches
+              ? 'light'
+              : 'dark'
+          }
+          if (t === 'dark') document.documentElement.classList.add('dark')
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

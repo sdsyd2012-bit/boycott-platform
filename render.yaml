@@ -1,0 +1,49 @@
+databases:
+  - name: dalil-platform-db
+    plan: free
+    # بديل: عند استخدام Neon، احذف قاعدة البيانات هذه
+    # واضبط متغيرات POSTGRES_* أدناه من قيم اتصال Neon يدوياً.
+
+services:
+  - type: web
+    name: dalil-platform-api
+    runtime: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    releaseCommand: python manage.py migrate
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --access-logfile -
+    healthCheckPath: /api/v1/sync/
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "dalil-platform-api.onrender.com,localhost,127.0.0.1"
+      - key: DJANGO_CORS_ALLOWED_ORIGINS
+        # غيّر الرابط إلى عنوان تطبيق الواجهة الأمامية بعد نشره على Netlify.
+        value: "https://dalil-platform.netlify.app"
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: dalil-platform-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: dalil-platform-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: dalil-platform-db
+          property: password
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: dalil-platform-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: dalil-platform-db
+          property: port
+      - key: POSTGRES_SSL_MODE
+        value: "prefer"
